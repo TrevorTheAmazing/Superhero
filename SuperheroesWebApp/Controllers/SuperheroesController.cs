@@ -14,9 +14,12 @@ namespace SuperheroesWebApp.Controllers
         {
             db = new ApplicationDbContext();
         }
+
+
         // GET: Superheroes
         public ActionResult Index()
         {
+            //get all superhero
             var superheroesIndexView = db.Superheroes.Select(s=>s);
             return View(superheroesIndexView);
         }
@@ -24,10 +27,13 @@ namespace SuperheroesWebApp.Controllers
         // GET: Superheroes/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            //get details for a superhero
+            var superhero = db.Superheroes.Where(s => s.Id == id).Single();
+            return View(superhero);
         }
 
         // GET: Superheroes/Create
+        //cant get superhero that dont exist
         public ActionResult Create()
         {
             Superhero superhero = new Superhero();
@@ -54,17 +60,27 @@ namespace SuperheroesWebApp.Controllers
         // GET: Superheroes/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var superhero = db.Superheroes.Where(s => s.Id == id).Single();
+            return View(superhero);
         }
 
         // POST: Superheroes/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Superhero superheroIn)
         {
+            Superhero superheroFromDb = null;
             try
             {
                 // TODO: Add update logic here
-
+                var tempSuperheroFromDb = db.Superheroes.Where(s => s.Id == superheroIn.Id).Single();
+                superheroFromDb = tempSuperheroFromDb;
+                superheroFromDb.name = superheroIn.name;
+                superheroFromDb.alterEgoName = superheroIn.alterEgoName;
+                superheroFromDb.primarySuperheroAbility = superheroIn.primarySuperheroAbility;
+                superheroFromDb.secondarySuperheroAbility = superheroIn.secondarySuperheroAbility;
+                superheroFromDb.catchphrase = superheroIn.catchphrase;
+                
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch
@@ -76,17 +92,22 @@ namespace SuperheroesWebApp.Controllers
         // GET: Superheroes/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var superhero = db.Superheroes.Where(s => s.Id == id).Single();
+            return View(superhero);
         }
 
         // POST: Superheroes/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Superhero superheroIn)
         {
+            Superhero superheroFromDb = null;
             try
             {
                 // TODO: Add delete logic here
-
+                var tempSuperheroFromDb = db.Superheroes.Where(s => s.Id == superheroIn.Id).Single();
+                superheroFromDb = tempSuperheroFromDb;
+                db.Superheroes.Remove(superheroFromDb);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch

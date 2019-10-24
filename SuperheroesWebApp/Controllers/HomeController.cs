@@ -26,5 +26,12 @@ namespace SuperheroesWebApp.Controllers
 
             return View();
         }
+
+        public ActionResult Superheroes()
+        {
+            ViewBag.Message = "Superheroes page.";
+
+            return View();
+        }
     }
 }
