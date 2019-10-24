@@ -9,10 +9,16 @@ namespace SuperheroesWebApp.Controllers
 {
     public class SuperheroesController : Controller
     {
+        ApplicationDbContext db;
+        public SuperheroesController()
+        {
+            db = new ApplicationDbContext();
+        }
         // GET: Superheroes
         public ActionResult Index()
         {
-            return View();
+            var superheroesIndexView = db.Superheroes.Select(s=>s);
+            return View(superheroesIndexView);
         }
 
         // GET: Superheroes/Details/5
@@ -35,7 +41,8 @@ namespace SuperheroesWebApp.Controllers
             try
             {
                 // TODO: Add insert logic here
-
+                db.Superheroes.Add(superhero);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch
